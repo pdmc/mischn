@@ -1,0 +1,11 @@
+# omit files
+*.tar.gz
+*.log
+*.o
+.*.swp
+
+# omit dirs
+/node_modules/
+/data/
+/logs/
+

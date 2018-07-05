@@ -4,14 +4,10 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"strconv"
-	"strings"
-	"sync"
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
@@ -25,6 +21,10 @@ type Block struct {
 	BPM       int
 	Hash      string
 	PrevHash  string
+}
+
+type Message struct {
+	BPM int
 }
 
 var Blockchain []Block
@@ -87,12 +87,14 @@ func run() error {
 	return nil
 }
 
+
 func makeMuxRouter() http.Handler {
 	muxRouter := mux.NewRouter()
 	muxRouter.HandleFunc("/", handleGetBlockchain).Methods("GET")
 	muxRouter.HandleFunc("/", handleWriteBlock).Methods("POST")
 	return muxRouter
 }
+
 
 func handleGetBlockchain(w http.ResponseWriter, r *http.Request) {
 	bytes, err := json.MarshalIndent(Blockchain, "", "  ")
@@ -101,10 +103,6 @@ func handleGetBlockchain(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	io.WriteString(w, string(bytes))
-}
-
-type Message struct {
-	BPM int
 }
 
 func handleWriteBlock(w http.ResponseWriter, r *http.Request) {
@@ -123,8 +121,7 @@ func handleWriteBlock(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if isBlockValid(newBlock, Blockchain[len(Blockchain)-1]) {
-		newBlockchain := append(Blockchain, newBlock)
-		replaceChain(newBlockchain)
+		Blockchain = append(Blockchain, newBlock)
 		spew.Dump(Blockchain)
 	}
 
@@ -152,7 +149,6 @@ func main() {
 	go func() {
 		t := time.Now()
 		genesisBlock := Block{0, t.String(), 0, "", ""}
-		genesisBlock.Hash = calculateHash(genesisBlock)
 		spew.Dump(genesisBlock)
 		Blockchain = append(Blockchain, genesisBlock)
 	}()

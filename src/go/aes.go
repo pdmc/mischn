@@ -1,3 +1,7 @@
+//
+// Crypto lib for mischn. All copyright reserved.
+// file: base58
+//
 package main
 
 func AesEncrypt(origData, key []byte) ([]byte, error) {

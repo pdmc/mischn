@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"fmt"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gorilla/mux"
@@ -145,6 +146,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	addr := os.Getenv("ADDR")
+	fmt.Println("Blockchain listening on address ",addr)
 
 	go func() {
 		t := time.Now()

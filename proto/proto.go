@@ -142,17 +142,18 @@ func respondWithJSON(w http.ResponseWriter, r *http.Request, code int, payload i
 }
 
 func main() {
+	const base_format = "2006-01-02 15:04:05"	// added by zhanghui
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	addr := os.Getenv("ADDR")
-	fmt.Println("Blockchain listening on address ",addr)
+	addr := os.Getenv("ADDR")	// added by zhanghui
+	fmt.Println("Blockchain listening on address ",addr)  // added by zhanghui
 
 	go func() {
 		t := time.Now()
-		genesisBlock := Block{0, t.String(), 0, "", ""}
+		genesisBlock := Block{0, t.Format(base_format), 0, "", ""}
 		spew.Dump(genesisBlock)
 		Blockchain = append(Blockchain, genesisBlock)
 	}()

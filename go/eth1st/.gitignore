@@ -1,4 +1,5 @@
-.tar.gz
-.logs
+*.tar.gz
+*.logs
+*.exe
 /data/
 /logs/
